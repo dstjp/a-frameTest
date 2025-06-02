@@ -30,9 +30,23 @@
 					depth="10"
 				>
 				</a-box>
-				<a-box color="green" position="0 0 0" height="10" width="10" depth="10">
+				<a-box
+					id="green-cube"
+					color="green"
+					position="0 0 0"
+					height="10"
+					width="10"
+					depth="10"
+				>
 				</a-box>
-				<a-box color="blue" position="10 0 0" height="10" width="10" depth="10">
+				<a-box
+					id="blue-cube"
+					color="blue"
+					position="10 0 0"
+					height="10"
+					width="10"
+					depth="10"
+				>
 				</a-box>
 				<a-box
 					id="yellow-cube"
@@ -52,7 +66,7 @@
 				let animationStep = 0;
 				const redCube = document.querySelector("#red-cube");
 				const yellowCube = document.querySelector("#yellow-cube");
-				const greenCube = document.querySelector('a-box[color="green"]');
+				const greenCube = document.querySelector("#green-cube");
 
 				document.addEventListener("keydown", function (event) {
 					if (event.code === "KeyE") {
