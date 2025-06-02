@@ -5,12 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 		<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-		<!-- <script src="https://unpkg.com/@c-frame/aframe-physics-system@4.2.2/dist/aframe-physics-system.min.js"></script> -->
 	</head>
 	<body>
 		<a-scene>
 			<a-sky color="black"></a-sky>
-			<a-entity id="stars"></a-entity>
+			<a-entity id="stars" starfield></a-entity>
 			<a-entity
 				id="cameraRig"
 				position="0 5 40"
@@ -48,30 +47,28 @@
 		</a-scene>
 
 		<script>
-			AFRAME.registerComponent("cube-controls", {
-				init: function () {
-					this.cubeGroup = document.querySelector("#cube-group");
-					this.redCube = document.querySelector("#red-cube");
+			// Wait for scene to be ready
+			document.querySelector("a-scene").addEventListener("loaded", function () {
+				// Simple cube animation without components
+				let isRedCubeMoved = false;
+				const redCube = document.querySelector("#red-cube");
 
-					this.isRedCubeMoved = false;
+				document.addEventListener("keydown", function (event) {
+					if (event.code === "KeyG") {
+						event.preventDefault();
+						event.stopPropagation();
 
-					window.addEventListener("keydown", (e) => {
-						if (e.code === "KeyF") {
-							this.toggleRedCubePosition();
-						}
-					});
-				},
-				toggleRedCubePosition: function () {
-					const targetPos = this.isRedCubeMoved ? "-10 0 0" : "-10 10 0";
-					this.redCube.setAttribute("animation", {
-						property: "position",
-						to: this.isRedCubeMoved ? "-10 0 0" : "-10 10 0",
-						dur: 500,
-						easing: "easeInOutQuad",
-					});
-				},
+						const targetY = isRedCubeMoved ? 0 : 10;
+						redCube.setAttribute("animation", {
+							property: "position",
+							to: `-10 ${targetY} 0`,
+							dur: 500,
+							easing: "easeInOutQuad",
+						});
+						isRedCubeMoved = !isRedCubeMoved;
+					}
+				});
 			});
-			document.querySelector("a-entity").setAttribute("cube-controls", "");
 
 			//Fly Controls Logic
 			AFRAME.registerComponent("vertical-controls", {
@@ -79,14 +76,13 @@
 					speed: { type: "number", default: 5 },
 				},
 				init: function () {
-					this.velocity = 0;
 					this.keys = {};
 
-					window.addEventListener("keydown", (e) => {
+					document.addEventListener("keydown", (e) => {
 						this.keys[e.code] = true;
 					});
 
-					window.addEventListener("keyup", (e) => {
+					document.addEventListener("keyup", (e) => {
 						this.keys[e.code] = false;
 					});
 				},
@@ -108,7 +104,7 @@
 				},
 			});
 
-			// Smooth loop logic
+			// Smooth rotation logic
 			AFRAME.registerComponent("smooth-rotation", {
 				schema: {
 					speed: { type: "number", default: 36 },
@@ -154,7 +150,6 @@
 					}
 				},
 			});
-			document.querySelector("#stars").setAttribute("starfield", "");
 		</script>
 	</body>
 </html>
