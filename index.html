@@ -50,9 +50,10 @@
 			// Wait for scene to be ready
 			document.querySelector("a-scene").addEventListener("loaded", function () {
 				// Multi-step cube animation sequence
-				let animationStep = 0; // 0 = original, 1 = red up, 2 = red over green + yellow over blue, 3 = red on top of yellow
+				let animationStep = 0; // 0 = original, 1 = red up, 2 = red over green + yellow over blue, 3 = red on top of yellow, 4 = green under blue
 				const redCube = document.querySelector("#red-cube");
 				const yellowCube = document.querySelector("#yellow-cube");
+				const greenCube = document.querySelector('a-box[color="green"]');
 
 				document.addEventListener("keydown", function (event) {
 					if (event.code === "KeyG") {
@@ -92,8 +93,17 @@
 								easing: "easeInOutQuad",
 							});
 							animationStep = 3;
+						} else if (animationStep === 3) {
+							// Step 4: Green cube goes under blue cube
+							greenCube.setAttribute("animation", {
+								property: "position",
+								to: "10 -10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							animationStep = 4;
 						} else {
-							// Step 4: Reset everything to original positions
+							// Step 5: Reset everything to original positions
 							redCube.setAttribute("animation", {
 								property: "position",
 								to: "-10 0 0",
@@ -103,6 +113,12 @@
 							yellowCube.setAttribute("animation", {
 								property: "position",
 								to: "0 10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							greenCube.setAttribute("animation", {
+								property: "position",
+								to: "0 0 0",
 								dur: 500,
 								easing: "easeInOutQuad",
 							});
