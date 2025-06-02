@@ -49,23 +49,65 @@
 		<script>
 			// Wait for scene to be ready
 			document.querySelector("a-scene").addEventListener("loaded", function () {
-				// Simple cube animation without components
-				let isRedCubeMoved = false;
+				// Multi-step cube animation sequence
+				let animationStep = 0; // 0 = original, 1 = red up, 2 = red over green + yellow over blue, 3 = red on top of yellow
 				const redCube = document.querySelector("#red-cube");
+				const yellowCube = document.querySelector("#yellow-cube");
 
 				document.addEventListener("keydown", function (event) {
 					if (event.code === "KeyG") {
 						event.preventDefault();
 						event.stopPropagation();
 
-						const targetY = isRedCubeMoved ? 0 : 10;
-						redCube.setAttribute("animation", {
-							property: "position",
-							to: `-10 ${targetY} 0`,
-							dur: 500,
-							easing: "easeInOutQuad",
-						});
-						isRedCubeMoved = !isRedCubeMoved;
+						if (animationStep === 0) {
+							// Step 1: Red cube goes up next to yellow
+							redCube.setAttribute("animation", {
+								property: "position",
+								to: "-10 10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							animationStep = 1;
+						} else if (animationStep === 1) {
+							// Step 2: Red goes over green (0,0,0) and yellow goes over blue (10,0,0)
+							redCube.setAttribute("animation", {
+								property: "position",
+								to: "0 10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							yellowCube.setAttribute("animation", {
+								property: "position",
+								to: "10 10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							animationStep = 2;
+						} else if (animationStep === 2) {
+							// Step 3: Red cube goes on top of yellow cube
+							redCube.setAttribute("animation", {
+								property: "position",
+								to: "10 20 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							animationStep = 3;
+						} else {
+							// Step 4: Reset everything to original positions
+							redCube.setAttribute("animation", {
+								property: "position",
+								to: "-10 0 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							yellowCube.setAttribute("animation", {
+								property: "position",
+								to: "0 10 0",
+								dur: 500,
+								easing: "easeInOutQuad",
+							});
+							animationStep = 0;
+						}
 					}
 				});
 			});
@@ -78,6 +120,7 @@
 				init: function () {
 					this.keys = {};
 
+					// Use document instead of window to avoid conflicts
 					document.addEventListener("keydown", (e) => {
 						this.keys[e.code] = true;
 					});
