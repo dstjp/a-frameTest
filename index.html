@@ -36,6 +36,14 @@
         ></a-entity>
       </a-entity>
 
+      <!--  <a-asset-item id="rounded-cube" src="./images/scene.gltf"></a-asset-item>
+      <a-entity
+        gltf-model="#rounded-cube"
+        position=" 0 5 35"
+        height="50"
+        width="50"
+      ></a-entity> -->
+
       <a-entity id="cube-group" position="0 0 -3" smooth-rotation>
         <a-box
           id="red-cube"
@@ -213,7 +221,7 @@
         tick: function (time, deltaTime) {
           if (!this.isGripPressed || !this.cameraRig) return;
 
-          const delta = deltaTime / 1000;
+          const delta = deltaTime / 500;
           const speed = this.data.speed;
           const rigPosition = this.cameraRig.getAttribute("position");
           const controllerEl = this.el.object3D;
@@ -255,7 +263,7 @@
 
           const el = this.el;
           const position = el.getAttribute("position");
-          const delta = deltaTime / 1000;
+          const delta = deltaTime / 500;
           const speed = this.data.speed;
 
           if (this.keys["Space"]) {
@@ -263,7 +271,7 @@
           }
 
           if (this.keys["KeyC"]) {
-            position.y = Math.max(1, position.y - speed * delta);
+            position.y = Math.max(position.y - speed * delta);
           }
 
           el.setAttribute("position", position);
@@ -280,7 +288,7 @@
         },
         tick: function (time, deltaTime) {
           const el = this.el;
-          const delta = deltaTime / 1000;
+          const delta = deltaTime / 2000;
           const speed = this.data.speed;
 
           this.currentRotation += speed * delta;

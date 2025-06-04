@@ -1,0 +1,8 @@
+Model Information:
+* title:	Default Cube Grass | Earth Block
+* source:	https://sketchfab.com/3d-models/default-cube-grass-earth-block-9193685ae4ac43a4abf9e35778b74f2e
+* author:	a-python-script (https://sketchfab.com/a-python-script)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
