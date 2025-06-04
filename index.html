@@ -11,7 +11,7 @@
       <a-sky color="black"></a-sky>
       <a-entity id="stars" starfield></a-entity>
 
-      <!-- VR Camera Rig with Controllers -->
+      <!-- VR Camera + Controllers -->
       <a-entity id="cameraRig" position="0 5 40">
         <a-camera
           id="head"
@@ -21,7 +21,6 @@
           vertical-controls
         ></a-camera>
 
-        <!-- Left Controller -->
         <a-entity
           id="leftController"
           hand-controls="hand: left"
@@ -29,7 +28,6 @@
           animation-trigger="hand: left"
         ></a-entity>
 
-        <!-- Right Controller -->
         <a-entity
           id="rightController"
           hand-controls="hand: right"
