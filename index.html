@@ -1,221 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-	</head>
-	<body>
-		<a-scene>
-			<a-sky color="black"></a-sky>
-			<a-entity id="stars" starfield></a-entity>
-			<a-entity
-				id="cameraRig"
-				position="0 5 40"
-				camera
-				look-controls
-				wasd-controls
-				vertical-controls
-			>
-			</a-entity>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-sky color="black"></a-sky>
+      <a-entity id="stars" starfield></a-entity>
+      <a-entity
+        id="cameraRig"
+        position="0 5 40"
+        camera
+        look-controls
+        wasd-controls
+        vertical-controls
+      >
+      </a-entity>
 
-			<a-entity id="cube-group" position="0 0 -3" smooth-rotation>
-				<a-box
-					id="red-cube"
-					color="red"
-					position="-10 0 0"
-					height="10"
-					width="10"
-					depth="10"
-				>
-				</a-box>
-				<a-box
-					id="green-cube"
-					color="green"
-					position="0 0 0"
-					height="10"
-					width="10"
-					depth="10"
-				>
-				</a-box>
-				<a-box
-					id="blue-cube"
-					color="blue"
-					position="10 0 0"
-					height="10"
-					width="10"
-					depth="10"
-				>
-				</a-box>
-				<a-box
-					id="yellow-cube"
-					color="yellow"
-					position="0 10 0"
-					height="10"
-					width="10"
-					depth="10"
-				>
-				</a-box>
-			</a-entity>
-		</a-scene>
+      <a-entity id="cube-group" position="0 0 -3" smooth-rotation>
+        <a-box
+          id="red-cube"
+          color="red"
+          position="-10 0 0"
+          height="10"
+          width="10"
+          depth="10"
+        >
+        </a-box>
+        <a-box
+          id="green-cube"
+          color="green"
+          position="0 0 0"
+          height="10"
+          width="10"
+          depth="10"
+        >
+        </a-box>
+        <a-box
+          id="blue-cube"
+          color="blue"
+          position="10 0 0"
+          height="10"
+          width="10"
+          depth="10"
+        >
+        </a-box>
+        <a-box
+          id="yellow-cube"
+          color="yellow"
+          position="0 10 0"
+          height="10"
+          width="10"
+          depth="10"
+        >
+        </a-box>
+      </a-entity>
 
-		<script>
-			// Cube animation logic
-			document.querySelector("a-scene").addEventListener("loaded", function () {
-				let animationStep = 0;
-				const redCube = document.querySelector("#red-cube");
-				const yellowCube = document.querySelector("#yellow-cube");
-				const greenCube = document.querySelector("#green-cube");
+      <a-text
+        id="instructions"
+        position="0 50 -70"
+        text="value: VR: Grip buttons to fly, Trigger for animation\nKeyboard: WASD to move, Space/C for up/down, E for animation; 
+				align: center; 
+				color: white; 
+				width: 70"
+      ></a-text>
+    </a-scene>
 
-				document.addEventListener("keydown", function (event) {
-					if (event.code === "KeyE") {
-						event.preventDefault();
-						event.stopPropagation();
+    <script>
+      // Cube animation logic
+      document.querySelector("a-scene").addEventListener("loaded", function () {
+        let animationStep = 0;
+        const redCube = document.querySelector("#red-cube");
+        const yellowCube = document.querySelector("#yellow-cube");
+        const greenCube = document.querySelector("#green-cube");
 
-						if (animationStep === 0) {
-							redCube.setAttribute("animation", {
-								property: "position",
-								to: "-10 10 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							animationStep = 1;
-						} else if (animationStep === 1) {
-							redCube.setAttribute("animation", {
-								property: "position",
-								to: "0 10 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							yellowCube.setAttribute("animation", {
-								property: "position",
-								to: "10 10 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							animationStep = 2;
-						} else if (animationStep === 2) {
-							redCube.setAttribute("animation", {
-								property: "position",
-								to: "10 20 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							animationStep = 3;
-						} else if (animationStep === 3) {
-							greenCube.setAttribute("animation", {
-								property: "position",
-								to: "10 -10 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							animationStep = 4;
-						} else {
-							redCube.setAttribute("animation", {
-								property: "position",
-								to: "-10 0 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							yellowCube.setAttribute("animation", {
-								property: "position",
-								to: "0 10 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							greenCube.setAttribute("animation", {
-								property: "position",
-								to: "0 0 0",
-								dur: 500,
-								easing: "easeInOutQuad",
-							});
-							animationStep = 0;
-						}
-					}
-				});
-			});
+        document.addEventListener("keydown", function (event) {
+          if (event.code === "KeyE") {
+            event.preventDefault();
+            event.stopPropagation();
 
-			//Fly Controls Logic
-			AFRAME.registerComponent("vertical-controls", {
-				schema: {
-					speed: { type: "number", default: 5 },
-				},
-				init: function () {
-					this.keys = {};
+            if (animationStep === 0) {
+              redCube.setAttribute("animation", {
+                property: "position",
+                to: "-10 10 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              animationStep = 1;
+            } else if (animationStep === 1) {
+              redCube.setAttribute("animation", {
+                property: "position",
+                to: "0 10 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              yellowCube.setAttribute("animation", {
+                property: "position",
+                to: "10 10 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              animationStep = 2;
+            } else if (animationStep === 2) {
+              redCube.setAttribute("animation", {
+                property: "position",
+                to: "10 20 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              animationStep = 3;
+            } else if (animationStep === 3) {
+              greenCube.setAttribute("animation", {
+                property: "position",
+                to: "10 -10 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              animationStep = 4;
+            } else {
+              redCube.setAttribute("animation", {
+                property: "position",
+                to: "-10 0 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              yellowCube.setAttribute("animation", {
+                property: "position",
+                to: "0 10 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              greenCube.setAttribute("animation", {
+                property: "position",
+                to: "0 0 0",
+                dur: 500,
+                easing: "easeInOutQuad",
+              });
+              animationStep = 0;
+            }
+          }
+        });
+      });
 
-					document.addEventListener("keydown", (e) => {
-						this.keys[e.code] = true;
-					});
+      //Fly Controls Logic
+      AFRAME.registerComponent("vertical-controls", {
+        schema: {
+          speed: { type: "number", default: 5 },
+        },
+        init: function () {
+          this.keys = {};
 
-					document.addEventListener("keyup", (e) => {
-						this.keys[e.code] = false;
-					});
-				},
-				tick: function (time, deltaTime) {
-					const el = this.el;
-					const position = el.getAttribute("position");
-					const delta = deltaTime / 1000;
-					const speed = this.data.speed;
+          document.addEventListener("keydown", (e) => {
+            this.keys[e.code] = true;
+          });
 
-					if (this.keys["Space"]) {
-						position.y += speed * delta;
-					}
+          document.addEventListener("keyup", (e) => {
+            this.keys[e.code] = false;
+          });
+        },
+        tick: function (time, deltaTime) {
+          const el = this.el;
+          const position = el.getAttribute("position");
+          const delta = deltaTime / 1000;
+          const speed = this.data.speed;
 
-					if (this.keys["KeyC"]) {
-						position.y = Math.max(1, position.y - speed * delta);
-					}
+          if (this.keys["Space"]) {
+            position.y += speed * delta;
+          }
 
-					el.setAttribute("position", position);
-				},
-			});
+          if (this.keys["KeyC"]) {
+            position.y = Math.max(1, position.y - speed * delta);
+          }
 
-			// Smooth rotation logic
-			AFRAME.registerComponent("smooth-rotation", {
-				schema: {
-					speed: { type: "number", default: 36 },
-				},
-				init: function () {
-					this.currentRotation = 0;
-				},
-				tick: function (time, deltaTime) {
-					const el = this.el;
-					const delta = deltaTime / 1000;
-					const speed = this.data.speed;
+          el.setAttribute("position", position);
+        },
+      });
 
-					this.currentRotation += speed * delta;
+      // Smooth rotation logic
+      AFRAME.registerComponent("smooth-rotation", {
+        schema: {
+          speed: { type: "number", default: 36 },
+        },
+        init: function () {
+          this.currentRotation = 0;
+        },
+        tick: function (time, deltaTime) {
+          const el = this.el;
+          const delta = deltaTime / 1000;
+          const speed = this.data.speed;
 
-					if (this.currentRotation >= 360) {
-						this.currentRotation -= 360;
-					}
+          this.currentRotation += speed * delta;
 
-					el.setAttribute("rotation", `0 ${this.currentRotation} 0`);
-				},
-			});
+          if (this.currentRotation >= 360) {
+            this.currentRotation -= 360;
+          }
 
-			// Starfield logic
-			AFRAME.registerComponent("starfield", {
-				schema: {
-					count: { type: "int", default: 100 },
-				},
-				init: function () {
-					for (let i = 0; i < this.data.count; i++) {
-						const star = document.createElement("a-sphere");
-						const radius = 0.1;
-						star.setAttribute("radius", radius);
-						star.setAttribute("color", "white");
+          el.setAttribute("rotation", `0 ${this.currentRotation} 0`);
+        },
+      });
 
-						const pos = {
-							x: (Math.random() - 0.5) * 200,
-							y: (Math.random() - 0.5) * 200,
-							z: (Math.random() - 0.5) * 200,
-						};
+      // Starfield logic
+      AFRAME.registerComponent("starfield", {
+        schema: {
+          count: { type: "int", default: 100 },
+        },
+        init: function () {
+          for (let i = 0; i < this.data.count; i++) {
+            const star = document.createElement("a-sphere");
+            const radius = 0.1;
+            star.setAttribute("radius", radius);
+            star.setAttribute("color", "white");
 
-						star.setAttribute("position", `${pos.x} ${pos.y} ${pos.z}`);
-						this.el.appendChild(star);
-					}
-				},
-			});
-		</script>
-	</body>
+            const pos = {
+              x: (Math.random() - 0.5) * 200,
+              y: (Math.random() - 0.5) * 200,
+              z: (Math.random() - 0.5) * 200,
+            };
+
+            star.setAttribute("position", `${pos.x} ${pos.y} ${pos.z}`);
+            this.el.appendChild(star);
+          }
+        },
+      });
+    </script>
+  </body>
 </html>
