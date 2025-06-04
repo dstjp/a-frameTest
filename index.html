@@ -3,21 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>VR Cube Project</title>
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene>
+    <a-scene vr-mode-ui="enabled: true" background="color: black">
       <a-sky color="black"></a-sky>
       <a-entity id="stars" starfield></a-entity>
-      <a-entity
-        id="cameraRig"
-        position="0 5 40"
-        camera
-        look-controls
-        wasd-controls
-        vertical-controls
-      >
+
+      <!-- VR Camera Rig with Controllers -->
+      <a-entity id="cameraRig" position="0 5 40">
+        <a-camera
+          id="head"
+          position="0 1.6 0"
+          look-controls
+          wasd-controls
+          vertical-controls
+        ></a-camera>
+
+        <!-- Left Controller -->
+        <a-entity
+          id="leftController"
+          hand-controls="hand: left"
+          vr-flight-controls="hand: left"
+          animation-trigger="hand: left"
+        ></a-entity>
+
+        <!-- Right Controller -->
+        <a-entity
+          id="rightController"
+          hand-controls="hand: right"
+          vr-flight-controls="hand: right"
+          animation-trigger="hand: right"
+        ></a-entity>
       </a-entity>
 
       <a-entity id="cube-group" position="0 0 -3" smooth-rotation>
@@ -61,11 +79,8 @@
 
       <a-text
         id="instructions"
-        position="0 50 -70"
-        text="value: VR: Grip buttons to fly, Trigger for animation\nKeyboard: WASD to move, Space/C for up/down, E for animation; 
-				align: center; 
-				color: white; 
-				width: 70"
+        position="0 40 -45"
+        text="value: VR: Grip buttons to fly, Trigger for animation\nDesktop: WASD to move, Space/C for up/down, E for animation; align: center; color: white; width: 70"
       ></a-text>
     </a-scene>
 
@@ -77,75 +92,150 @@
         const yellowCube = document.querySelector("#yellow-cube");
         const greenCube = document.querySelector("#green-cube");
 
+        function triggerAnimation() {
+          if (animationStep === 0) {
+            redCube.setAttribute("animation", {
+              property: "position",
+              to: "-10 10 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            animationStep = 1;
+          } else if (animationStep === 1) {
+            redCube.setAttribute("animation", {
+              property: "position",
+              to: "0 10 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            yellowCube.setAttribute("animation", {
+              property: "position",
+              to: "10 10 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            animationStep = 2;
+          } else if (animationStep === 2) {
+            redCube.setAttribute("animation", {
+              property: "position",
+              to: "10 20 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            animationStep = 3;
+          } else if (animationStep === 3) {
+            greenCube.setAttribute("animation", {
+              property: "position",
+              to: "10 -10 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            animationStep = 4;
+          } else {
+            redCube.setAttribute("animation", {
+              property: "position",
+              to: "-10 0 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            yellowCube.setAttribute("animation", {
+              property: "position",
+              to: "0 10 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            greenCube.setAttribute("animation", {
+              property: "position",
+              to: "0 0 0",
+              dur: 500,
+              easing: "easeInOutQuad",
+            });
+            animationStep = 0;
+          }
+        }
+
+        // keyboard animation controls
         document.addEventListener("keydown", function (event) {
           if (event.code === "KeyE") {
             event.preventDefault();
             event.stopPropagation();
-
-            if (animationStep === 0) {
-              redCube.setAttribute("animation", {
-                property: "position",
-                to: "-10 10 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              animationStep = 1;
-            } else if (animationStep === 1) {
-              redCube.setAttribute("animation", {
-                property: "position",
-                to: "0 10 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              yellowCube.setAttribute("animation", {
-                property: "position",
-                to: "10 10 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              animationStep = 2;
-            } else if (animationStep === 2) {
-              redCube.setAttribute("animation", {
-                property: "position",
-                to: "10 20 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              animationStep = 3;
-            } else if (animationStep === 3) {
-              greenCube.setAttribute("animation", {
-                property: "position",
-                to: "10 -10 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              animationStep = 4;
-            } else {
-              redCube.setAttribute("animation", {
-                property: "position",
-                to: "-10 0 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              yellowCube.setAttribute("animation", {
-                property: "position",
-                to: "0 10 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              greenCube.setAttribute("animation", {
-                property: "position",
-                to: "0 0 0",
-                dur: 500,
-                easing: "easeInOutQuad",
-              });
-              animationStep = 0;
-            }
+            triggerAnimation();
           }
         });
+
+        // VR animation controls
+        window.triggerAnimation = triggerAnimation;
       });
 
-      //Fly Controls Logic
+      // VR Controller Animation control
+      AFRAME.registerComponent("animation-trigger", {
+        schema: {
+          hand: { type: "string", default: "right" },
+        },
+        init: function () {
+          const self = this;
+          this.el.addEventListener("triggerdown", function () {
+            if (window.triggerAnimation) {
+              window.triggerAnimation();
+            }
+          });
+          // Fallback for different VR systems
+          this.el.addEventListener("trackpaddown", function () {
+            if (window.triggerAnimation) {
+              window.triggerAnimation();
+            }
+          });
+        },
+      });
+
+      // Simplified VR Flying Controls Component
+      AFRAME.registerComponent("vr-flight-controls", {
+        schema: {
+          hand: { type: "string", default: "right" },
+          speed: { type: "number", default: 5 },
+        },
+        init: function () {
+          const self = this;
+          this.isGripPressed = false;
+          this.cameraRig = null;
+
+          // Wait for scene to load
+          this.el.sceneEl.addEventListener("loaded", function () {
+            self.cameraRig = document.querySelector("#cameraRig");
+          });
+
+          this.el.addEventListener("gripdown", function () {
+            self.isGripPressed = true;
+          });
+
+          this.el.addEventListener("gripup", function () {
+            self.isGripPressed = false;
+          });
+        },
+        tick: function (time, deltaTime) {
+          if (!this.isGripPressed || !this.cameraRig) return;
+
+          const delta = deltaTime / 1000;
+          const speed = this.data.speed;
+          const rigPosition = this.cameraRig.getAttribute("position");
+          const controllerEl = this.el.object3D;
+
+          if (controllerEl) {
+            // Move forward VR
+            const forward = new THREE.Vector3(0, 0, -5);
+            forward.applyQuaternion(controllerEl.quaternion);
+
+            // Move in the direction the controller is pointing
+            rigPosition.x += forward.x * speed * delta;
+            rigPosition.y += forward.y * speed * delta;
+            rigPosition.z += forward.z * speed * delta;
+
+            this.cameraRig.setAttribute("position", rigPosition);
+          }
+        },
+      });
+
+      // Keyboard controls logic
       AFRAME.registerComponent("vertical-controls", {
         schema: {
           speed: { type: "number", default: 5 },
@@ -162,6 +252,9 @@
           });
         },
         tick: function (time, deltaTime) {
+          // Only apply desktop controls when not in VR mode
+          if (this.el.sceneEl.is("vr-mode")) return;
+
           const el = this.el;
           const position = el.getAttribute("position");
           const delta = deltaTime / 1000;
